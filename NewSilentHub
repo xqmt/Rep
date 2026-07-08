@@ -1,4 +1,3 @@
--- ================= LinoriaLib (New UI) Setup =================
 local repo = "https://raw.githubusercontent.com/cloudsense-pub/UELinoriaLib/main/"
 local Library = loadstring(game:HttpGet(repo .. "Library.lua"))()
 local ThemeManager = loadstring(game:HttpGet(repo .. "addons/ThemeManager.lua"))()
@@ -23,7 +22,6 @@ local Window = Library:CreateWindow({
     MenuFadeTime = 0.2
 })
 
--- ================= [FIX] Linoria Tabs Overflow & Scroll Engine =================
 task.spawn(function()
     local MainFrame = Library.Main
     if MainFrame then
@@ -62,7 +60,6 @@ task.spawn(function()
     end
 end)
 
--- ================= Global Variables =================
 _G.SilentAimEnabled = false
 _G.BulletTPEnabled = false 
 _G.WallCheckEnabled = false
@@ -73,14 +70,12 @@ _G.FOVSize = 100
 _G.FOVVisible = true
 _G.TracerEnabled = true
 
--- Mobile Aimbot Variables
 _G.MobileAimbotEnabled = false
 _G.AimbotSmoothness = 0.1
 _G.AutoPredictionEnabled = false
 _G.PredictionValue = 0.1 
 _G.AimbotTargetPart = "Head"
 
--- New Added Smooth Variables
 _G.JumpSmooth = 1
 _G.SmoothX = 1
 _G.SmoothZ = 1
@@ -176,7 +171,6 @@ local CurrentWeatherEffect = nil
 local DisplayNameLabel, UsernameLabel, UserIdLabel
 local ESP_Storage = {}
 
--- ================= Custom Hit Notification Engine =================
 local HitNotifyGui = Instance.new("ScreenGui")
 HitNotifyGui.Name = "ProjectStatic_HitNotifyGui"
 HitNotifyGui.ResetOnSpawn = false
@@ -316,7 +310,6 @@ local function ShowCustomHitNotification(targetName, partName, damage)
     end)
 end
 
--- ================= Play Hit Sound Function =================
 local function PlayHitSound()
     if _G.HitSoundMode == "None" or not SoundIDs[_G.HitSoundMode] then return end
     local Sound = Instance.new("Sound")
@@ -327,7 +320,6 @@ local function PlayHitSound()
     Sound:Destroy()
 end
 
--- ================= Skybox Update Function =================
 local function UpdateSkybox()
     for _, obj in ipairs(Lighting:GetChildren()) do
         if obj:IsA("Sky") and (obj.Name == "ProjectStaticSky" or obj.Name == "Sky") then obj:Destroy() end
@@ -343,7 +335,6 @@ local function UpdateSkybox()
     end
 end
 
--- ================= Create Target HUD GUI =================
 local TargetGui = Instance.new("ScreenGui")
 TargetGui.Name = "TargetHudGui"
 TargetGui.ResetOnSpawn = false
@@ -391,14 +382,12 @@ local HealthBarCorner = Instance.new("UICorner") HealthBarCorner.CornerRadius = 
 local HealthBar = Instance.new("Frame") HealthBar.Size = UDim2.new(1, 0, 1, 0) HealthBar.BackgroundColor3 = Color3.fromRGB(0, 255, 120) HealthBar.Parent = HealthBackground
 local MainBarCorner = Instance.new("UICorner") MainBarCorner.CornerRadius = UDim.new(0, 3) MainBarCorner.Parent = HealthBar
 
--- ================= ScreenGui Container for Modern Fat-Font ESP =================
 local EspGui = Instance.new("ScreenGui")
 EspGui.Name = "ModernEspGui"
 EspGui.ResetOnSpawn = false
 EspGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 EspGui.Parent = CoreGui:FindFirstChild("RobloxGui") or CoreGui
 
--- ================= Drawing Objects Setup =================
 local FOVCircleOutline = Drawing.new("Circle") FOVCircleOutline.Thickness = 1.5 FOVCircleOutline.NumSides = 40 FOVCircleOutline.Filled = false FOVCircleOutline.Visible = _G.FOVVisible
 local FOVCircle = Drawing.new("Circle") FOVCircle.Thickness = 1.0 FOVCircle.NumSides = 40 FOVCircle.Filled = false FOVCircle.Visible = _G.FOVVisible
 local FOVFill = Drawing.new("Circle") FOVFill.NumSides = 40 FOVFill.Filled = true FOVFill.Visible = false
@@ -409,7 +398,6 @@ local function getScreenCenter() return Vector2.new(Camera.ViewportSize.X / 2, C
 local function isBehindWall(targetPart) if not _G.WallCheckEnabled then return false end local Parts = Camera:GetPartsObscuringTarget({targetPart.Position}, {LocalPlayer.Character, targetPart.Parent}) return #Parts > 0 end
 local function isDead(humanoid, char) if not _G.DieCheckEnabled then return false end if humanoid and humanoid.Health <= 0 then return true end if char and not char:IsDescendantOf(workspace) then return true end return false end
 
--- ================= Target Selector System (With Perm Lock-On) =================
 local CurrentAimTargetPosition = nil local CurrentTargetPlayer = nil local CurrentTargetCharacter = nil local lastTarget = nil local interpolationProgress = 0 
 
 task.spawn(function()
@@ -491,7 +479,6 @@ task.spawn(function()
     end
 end)
 
--- ================= Health Monitor =================
 local CurrentConnectedHumanoid = nil local HealthConnection = nil
 local function BindHealthTracker(targetPlayer)
     if not targetPlayer or not targetPlayer.Character then return end
@@ -520,7 +507,6 @@ local function BindHealthTracker(targetPlayer)
     end)
 end
 
--- ================= HEAD-LOCK BILLBOARD ESP ENGINE =================
 local function CreateESP(player)
     local Billboard = Instance.new("BillboardGui") Billboard.Name = player.Name .. "_BillboardESP" Billboard.Size = UDim2.new(0, 200, 0, 50) Billboard.AlwaysOnTop = true Billboard.ExtentsOffset = Vector3.new(0, 2.5, 0) Billboard.Enabled = false Billboard.Parent = EspGui
     local NameLabel = Instance.new("TextLabel") NameLabel.Size = UDim2.new(1, 0, 0, 16) NameLabel.Font = _G.GlobalFontSetting NameLabel.TextSize = 13 NameLabel.TextColor3 = _G.ColorName NameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) NameLabel.TextStrokeTransparency = 0 NameLabel.BackgroundTransparency = 1 NameLabel.Parent = Billboard
@@ -535,7 +521,6 @@ for _, player in ipairs(Players:GetPlayers()) do if player ~= LocalPlayer then C
 Players.PlayerAdded:Connect(function(player) if player ~= LocalPlayer then CreateESP(player) end end)
 Players.PlayerRemoving:Connect(function(player) RemoveESP(player) end)
 
--- ================= Main Render Loop =================
 local RunService = game:GetService("RunService")
 local spinAngle = 0 local jitterToggle = false local LastLoggedHudTargetId = 0 local colorRotateTick = 0
 
@@ -660,7 +645,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ================= Auto Bunny Hop =================
 task.spawn(function()
     while true do task.wait()
         if _G.BhopEnabled and LocalPlayer.Character then
@@ -676,7 +660,6 @@ task.spawn(function()
     end
 end)
 
--- ================= Anti-Detection Enhanced Namecall Hook =================
 local OldNamecall
 OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(Self, ...)
     if checkcaller() then 
@@ -725,7 +708,6 @@ OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(Self, ...)
     return OldNamecall(Self, ...)
 end))
 
--- ================= Tabs Setup (New Sized UI Structure) =================
 local Tabs = {
     Main = Window:AddTab("Main"),  
     Aimbot = Window:AddTab("Aimbot"), 
@@ -737,11 +719,9 @@ local Tabs = {
     ['UI'] = Window:AddTab("UI")   
 }
 
--- === TAB 0: MOBILE AIMBOT CONFIGURATION ===
 local MobileAimbotBox = Tabs.Aimbot:AddLeftGroupbox("Aimbot")
 local MobileAimbotSettings = Tabs.Aimbot:AddRightGroupbox("Aimbot Options")
 
--- [ADDED KEYBIND HERE]
 MobileAimbotBox:AddToggle("MobileAimbotToggle", { Text = "Enable Aimbot", Default = false })
 :AddKeyPicker("MobileAimbotKeybind", { Default = "None", SyncToggleState = true, Mode = "Toggle", Text = "Mobile Aimbot Bind" })
 Toggles.MobileAimbotToggle:OnChanged(function() _G.MobileAimbotEnabled = Toggles.MobileAimbotToggle.Value end)
@@ -749,7 +729,6 @@ Toggles.MobileAimbotToggle:OnChanged(function() _G.MobileAimbotEnabled = Toggles
 MobileAimbotBox:AddSlider("AimbotSmoothSlider", { Text = "Aimbot Smoothness", Default = 0.1, Min = 0.01, Max = 1, Rounding = 2 })
 Options.AimbotSmoothSlider:OnChanged(function() _G.AimbotSmoothness = Options.AimbotSmoothSlider.Value end)
 
--- Added Jump Smooth, Smooth X, Smooth Z Sliders (1% - 100%)
 MobileAimbotBox:AddSlider("JumpSmoothSlider", { Text = "Jump Smooth", Default = 1, Min = 1, Max = 100, Rounding = 0, Suffix = "%" })
 Options.JumpSmoothSlider:OnChanged(function() _G.JumpSmooth = Options.JumpSmoothSlider.Value end)
 
@@ -762,14 +741,12 @@ Options.SmoothZSlider:OnChanged(function() _G.SmoothZ = Options.SmoothZSlider.Va
 MobileAimbotBox:AddToggle("AutoPredictionToggle", { Text = "Enable Auto Prediction", Default = false })
 Toggles.AutoPredictionToggle:OnChanged(function() _G.AutoPredictionEnabled = Toggles.AutoPredictionToggle.Value end)
 
--- Added Prediction Slider (0.0 - 5.0)
 MobileAimbotBox:AddSlider("PredictionSlider", { Text = "Prediction Multiplier", Default = 0.1, Min = 0.0, Max = 5.0, Rounding = 2 })
 Options.PredictionSlider:OnChanged(function() _G.PredictionValue = Options.PredictionSlider.Value end)
 
 MobileAimbotSettings:AddDropdown("MobileTargetPartDropdown", { Text = "Aimbot Target Part", Values = {"Head", "HumanoidRootPart"}, Default = 1, Multi = false })
 Options.MobileTargetPartDropdown:OnChanged(function() _G.AimbotTargetPart = Options.MobileTargetPartDropdown.Value end)
 
--- === TAB 1: SILENT AIM CONFIGURATION ===
 local LeftGroupBox = Tabs.Main:AddLeftGroupbox("Silent Aim")
 local PermLockGroupBox = Tabs.Main:AddLeftGroupbox("Permanent Lock Settings")
 local TargetGroupBox = Tabs.Main:AddLeftGroupbox("Targeting Options")
@@ -925,7 +902,6 @@ Options.TracerLineColorPicker:OnChanged(function() _G.TracerLineColor = Options.
 TracerGroupBox:AddLabel("Tracer Outline Color"):AddColorPicker("TracerLineOutlineColorPicker", { Default = Color3.fromRGB(0, 0, 0) })
 Options.TracerLineOutlineColorPicker:OnChanged(function() _G.TracerLineOutlineColor = Options.TracerLineOutlineColorPicker.Value end)
 
--- === TAB 2: HIT EFFECTS ===
 local SoundLeftBox = Tabs.HitEffects:AddLeftGroupbox("Hit Sound")
 local NotifyRightBox = Tabs.HitEffects:AddRightGroupbox("Hit Notification")
 
@@ -967,7 +943,6 @@ Options.HitNotifyColorPicker:OnChanged(function()
     end
 end)
 
--- === TAB 3: VISUALS ===
 local EspLeftBox = Tabs.ESP:AddLeftGroupbox("Master Visuals Control")
 local EspRightBox = Tabs.ESP:AddRightGroupbox("Visual Color Customization")
 
@@ -990,7 +965,6 @@ Options.GlowColorPicker:OnChanged(function() _G.ColorBox = Options.GlowColorPick
 EspRightBox:AddLabel("Name Text Color"):AddColorPicker("NameColorPicker", { Default = Color3.fromRGB(255, 255, 255) })
 Options.NameColorPicker:OnChanged(function() _G.ColorName = Options.NameColorPicker.Value end)
 
--- === TAB 4: MOVEMENT & ANTI AIM ===
 local MoveLeftBox = Tabs.Movement:AddLeftGroupbox("Anti Aim")
 local MoveRightBox = Tabs.Movement:AddRightGroupbox("Movement & Camera")
 
@@ -1021,7 +995,6 @@ Toggles.BhopToggle:OnChanged(function() _G.BhopEnabled = Toggles.BhopToggle.Valu
 MoveRightBox:AddSlider("BhopMultiplierSlider", { Text = "Bhop Velocity Speed Multiplier", Default = 1.5, Min = 1, Max = 5, Rounding = 1 })
 Options.BhopMultiplierSlider:OnChanged(function() _G.BhopSpeedMultiplier = Options.BhopMultiplierSlider.Value end)
 
--- === TAB 5: WORLD ENVIRONMENT ===
 local WorldLeftBox = Tabs.World:AddLeftGroupbox("Lighting Colors & Time")
 local WorldSkyboxBox = Tabs.World:AddLeftGroupbox("Custom Skybox System")
 local WorldFogBox = Tabs.World:AddLeftGroupbox("Fog Customization")
@@ -1098,7 +1071,6 @@ Options.WeatherDropdown:OnChanged(function()
     end
 end)
 
--- ================= [FIXED] Loaders Scripts Addon Configuration =================
 local AddonGroupBox = Tabs.Addons:AddLeftGroupbox("loaders Scripts")
 
 AddonGroupBox:AddButton({
@@ -1116,7 +1088,6 @@ AddonGroupBox:AddButton({
     end
 })
 
--- === TAB 7: UI SETTINGS & CONFIGS ===
 local InterfaceGroup = Tabs['UI']:AddLeftGroupbox("Global Font Customization")
 local MenuGroup = Tabs['UI']:AddLeftGroupbox("Menu Settings")
 local AppearanceGroup = Tabs['UI']:AddRightGroupbox("UI Appearance Customization")
